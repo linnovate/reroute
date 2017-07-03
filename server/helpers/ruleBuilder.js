@@ -45,6 +45,14 @@ function json2rule(ruleObj) {
         conditions.push(`isInDates(this.fact.${currentItem.factProp.min}, this.fact.${currentItem.factProp.max}, [${currentItem.value}])`);
         break;
       }
+      case 'in array': {
+        const array = [];
+        currentItem.value.forEach((val) => {
+          array.push(`this.fact.${currentItem.factProp} === ${val}`);
+        });
+        conditions.push(`(${_.join(array, ' || ')})`);
+        break;
+      }
       default: {
         break;
       }
