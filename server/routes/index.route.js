@@ -3,6 +3,7 @@ import userRoutes from './user.route';
 import authRoutes from './auth.route';
 import ruleRoutes from './rule.route';
 import testRulesRoutes from './testRules.route';
+import iconsRoutes from './icons.route';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -21,5 +22,7 @@ router.use('/auth', authRoutes);
 router.use('/rules', ruleRoutes);
 
 router.use('/testRules', testRulesRoutes);
+
+router.use('/icons', iconsRoutes);
 
 export default router;
