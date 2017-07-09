@@ -17,7 +17,7 @@ import APIError from '../server/helpers/APIError';
 const app = express();
 
 if (config.env === 'development') {
-  app.use(logger('dev'));
+  //app.use(logger('dev'));
 }
 
 // parse body params and attache them to req.body
@@ -38,12 +38,12 @@ app.use(cors());
 if (config.env === 'development') {
   expressWinston.requestWhitelist.push('body');
   expressWinston.responseWhitelist.push('body');
-  app.use(expressWinston.logger({
-    winstonInstance,
-    meta: true, // optional: log meta data about request (defaults to true)
-    msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-    colorStatus: true // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
-  }));
+  // app.use(expressWinston.logger({
+  //   winstonInstance,
+  //   meta: true, // optional: log meta data about request (defaults to true)
+  //   msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
+  //   colorStatus: true // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
+  // }));
 }
 
 // mount all routes on /api path
@@ -71,9 +71,9 @@ app.use((req, res, next) => {
 
 // log error in winston transports except when executing test suite
 if (config.env !== 'test') {
-  app.use(expressWinston.errorLogger({
-    winstonInstance
-  }));
+  // app.use(expressWinston.errorLogger({
+  //   winstonInstance
+  // }));
 }
 
 // error handler, send stacktrace only during development

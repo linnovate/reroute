@@ -13,7 +13,7 @@ function json2rule(ruleObj) {
       case 'in multi range': {
         const range = [];
         currentItem.value.forEach((val) => {
-          range.push(`new Date(this.fact.${currentItem.factProp.min}) >= new Date('${val.min}') && new Date(this.fact.${currentItem.factProp.max}) <= new Date('${val.max}')`);
+          range.push(`new Date(this.fact.${currentItem.factProp.min}).setHours(0, 0, 0, 0) <= new Date('${val.max}').setHours(0, 0, 0, 0) && new Date(this.fact.${currentItem.factProp.max}).setHours(0, 0, 0, 0) >= new Date('${val.min}').setHours(0, 0, 0, 0)`);
         });
         conditions.push(`(${_.join(range, ' || ')})`);
         break;
@@ -21,7 +21,7 @@ function json2rule(ruleObj) {
       case 'not in multi range': {
         const range = [];
         currentItem.value.forEach((val) => {
-          range.push(`new Date(this.fact.${currentItem.factProp.min}) >= new Date('${val.min}') && new Date(this.fact.${currentItem.factProp.max}) <= new Date('${val.max}')`);
+          range.push(`new Date(this.fact.${currentItem.factProp.min}).setHours(0, 0, 0, 0) <= new Date('${val.max}').setHours(0, 0, 0, 0) && new Date(this.fact.${currentItem.factProp.max}).setHours(0, 0, 0, 0) >= new Date('${val.min}').setHours(0, 0, 0, 0)`);
         });
         conditions.push(`!(${_.join(range, ' || ')})`);
         break;
@@ -34,7 +34,7 @@ function json2rule(ruleObj) {
         conditionsFuncs = `${conditionsFuncs} var isInDates = function(date1, date2, range) {
           var d1 = new Date(date1);
           var d2 = new Date(date2); 
-          while (d1 < d2) {
+          while (d1 <= d2) {
           var day = new Date(d1).getDay();
           if (range.indexOf(day) > -1) {
             return true;
@@ -48,7 +48,7 @@ function json2rule(ruleObj) {
       case 'in array': {
         const array = [];
         currentItem.value.forEach((val) => {
-          array.push(`this.fact.${currentItem.factProp} === ${val}`);
+          array.push(`this.fact.${currentItem.factProp} === '${val}'`);
         });
         conditions.push(`(${_.join(array, ' || ')})`);
         break;

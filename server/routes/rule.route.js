@@ -17,7 +17,7 @@ router.route('/:ruleId')
   .get(ruleCtrl.get)
 
   /** PUT /api/rules/:ruleId - Update rule */
-  .put(validate(paramValidation.updateUser), ruleCtrl.update)
+  .put(ruleCtrl.update)
 
   /** DELETE /api/rules/:ruleId - Delete rule */
   .delete(ruleCtrl.remove);

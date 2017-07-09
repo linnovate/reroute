@@ -49,7 +49,12 @@ function create(req, res, next) {
  */
 function update(req, res, next) {
   const rule = req.rule;
-  rule.name = req.body.name;
+  const ruleTmp = regex.json2rule(req.body.ruleObj);
+
+  rule.name = req.body.ruleName;
+  rule.ruleObj = req.body.ruleObj;
+  rule.condition = ruleTmp.condition;
+  rule.consequence = ruleTmp.consequence;
 
   rule.save()
     .then(savedRule => res.json(savedRule))
