@@ -5,16 +5,25 @@ import APIError from '../helpers/APIError';
 
 
 const IconsMatrixSchema = new mongoose.Schema({
-  hotelId: {
+  hotelID: {
     type: String,
     required: true
   },
-  matrixType: {
-    type: String,
-    required: true
+  roomCategory: {
+    type: String
   },
-  matrix: {
+  roomName: {
+    type: String
+  },
+  pax: {
+    type: String,
+    required: true,
+  },
+  icons: {
     type: Array
+  },
+  weight: {
+    type: Number
   },
   createdAt: {
     type: Date,
@@ -30,8 +39,9 @@ IconsMatrixSchema.method({
  */
 IconsMatrixSchema.statics = {
 
-  getByHotel(hotelId) {
-    return this.find({ hotelId })
+  getByHotelPax(hotelID, pax) {
+    return this.find({ hotelID, pax })
+      .sort({ weight: 1 })
       .exec()
       .then((iconsMatrix) => {
         if (iconsMatrix) {

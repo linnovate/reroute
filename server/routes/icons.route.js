@@ -4,7 +4,7 @@ import iconsCtrl from '../controllers/icons.controller';
 const router = express.Router(); // eslint-disable-line new-cap
 
 
-router.route('/:hotelId')
+router.route('/')
   .get(iconsCtrl.load);
 
 
