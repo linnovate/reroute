@@ -5,7 +5,15 @@ const router = express.Router(); // eslint-disable-line new-cap
 
 
 router.route('/')
-  .get(iconsCtrl.load);
+  .get(iconsCtrl.load)
+
+  .post(iconsCtrl.update);
+
+router.route('/copy')
+  .post(iconsCtrl.copy);
+
+router.route('/pax')
+  .get(iconsCtrl.loadPaxValues);
 
 
 

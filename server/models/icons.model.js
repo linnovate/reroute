@@ -49,7 +49,19 @@ IconsMatrixSchema.statics = {
         }
         return null;
       });
-  }
+  },
+
+  get(id) {
+    return this.findById(id)
+      .exec()
+      .then((room) => {
+        if (room) {
+          return room;
+        }
+        const err = new APIError('No such room exists!', httpStatus.NOT_FOUND);
+        return Promise.reject(err);
+      });
+  },
 
   // /**
   //  * List rules in descending order of 'createdAt' timestamp.

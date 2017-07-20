@@ -4,6 +4,7 @@ import authRoutes from './auth.route';
 import ruleRoutes from './rule.route';
 import testRulesRoutes from './testRules.route';
 import iconsRoutes from './icons.route';
+import useIconsRoutes from './useIcons.route';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -21,8 +22,10 @@ router.use('/auth', authRoutes);
 // mount rule routes at /rules
 router.use('/rules', ruleRoutes);
 
-router.use('/testRules', testRulesRoutes);
+router.use('/use-upsales', testRulesRoutes);
 
 router.use('/icons', iconsRoutes);
+
+router.use('/use-icons', useIconsRoutes);
 
 export default router;
