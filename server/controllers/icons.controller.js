@@ -82,9 +82,27 @@ function copy(req, res, next) {
             .catch(e => next(e));
         });
       } else {
-        return res.send('ffffffff');
+        async.each(rooms, (value, callback) => {
+          const roomMatrix = new IconsMatrix({
+            hotelID: value.hotelID,
+            roomCategory: value.roomCategory,
+            roomName: value.roomName,
+            pax: req.body.pax,
+            icons: value.icons,
+            weight: value.key
+          });
+          roomMatrix.save()
+            .then(() => callback())
+            .catch(e => callback(e));
+        }, (err) => {
+          if (err) next(err.message);
+          IconsMatrix.getByHotelPax(req.body.hotelID, req.body.pax)
+            .then(result => res.json(result))
+            .catch(e => next(e));
+        });
       }
-    });
+    })
+    .catch(e => next(e));
 }
 
 function loadPaxValues(req, res) {
