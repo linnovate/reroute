@@ -2,7 +2,7 @@ import RuleEngine from 'node-rules';
 import Rule from '../models/rule.model';
 
 function test(req, res, next) {
-  Rule.list()
+  Rule.list({ type: 'upsales' })
     .then((rules) => {
       const rulesArr = JSON.stringify(rules);
       const inputObject = {};

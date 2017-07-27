@@ -1,6 +1,4 @@
 import express from 'express';
-import validate from 'express-validation';
-import paramValidation from '../../config/param-validation';
 import ruleCtrl from '../controllers/rule.controller';
 
 const router = express.Router(); // eslint-disable-line new-cap
@@ -10,7 +8,9 @@ router.route('/')
   .get(ruleCtrl.list)
 
   /** POST /api/rules - Create new rule */
-  .post(ruleCtrl.create);
+  .post(ruleCtrl.create)
+
+  .put(ruleCtrl.updatePriority);
 
 router.route('/:ruleId')
   /** GET /api/rules/:ruleId - Get rule */

@@ -1,5 +1,8 @@
+import async from 'async';
+import _ from 'lodash';
 import Rule from '../models/rule.model';
 import regex from '../helpers/ruleBuilder';
+
 
 /**
  * Load rule and append to req.
@@ -29,6 +32,7 @@ function get(req, res) {
 function create(req, res, next) {
   const ruleTmp = regex.json2rule(req.body.ruleObj);
   const rule = new Rule({
+    type: req.body.type,
     name: req.body.ruleName,
     ruleObj: req.body.ruleObj,
     condition: ruleTmp.condition,
@@ -36,10 +40,21 @@ function create(req, res, next) {
     _on: true,
     priority: 1,
   });
-
-  rule.save()
-    .then(savedRule => res.json(savedRule))
-    .catch(e => next(e));
+  if (req.body.type === 'sentences') {
+    rule.available = req.body.ruleObj.conditions.available;
+    Rule.getCount({ type: 'sentences', available: rule.available })
+      .then((c) => {
+        rule.priority = c + 1;
+        rule.save()
+          .then(savedRule => res.json(savedRule))
+          .catch(e => next(e));
+      })
+      .catch(e => next(e));
+  } else {
+    rule.save()
+      .then(savedRule => res.json(savedRule))
+      .catch(e => next(e));
+  }
 }
 
 /**
@@ -68,8 +83,8 @@ function update(req, res, next) {
  * @returns {Rule[]}
  */
 function list(req, res, next) {
-  const { limit = 50, skip = 0 } = req.query;
-  Rule.list({ limit, skip })
+  const { limit = 50, skip = 0, type, available } = req.query;
+  Rule.list({ limit, skip, type, available })
     .then(rules => res.json(rules))
     .catch(e => next(e));
 }
@@ -85,4 +100,24 @@ function remove(req, res, next) {
     .catch(e => next(e));
 }
 
-export default { load, get, create, update, list, remove };
+function updatePriority(req, res, next) {
+  const rules = req.body.rules;
+
+  async.forEachOf(rules, (value, key, callback) => {
+    Rule.get(value._id)
+      .then((ruleRes) => {
+        const rule = ruleRes;
+        rule.priority = key + 1;
+
+        return rule.save()
+          .then(() => callback())
+          .catch(e => callback(e));
+      })
+      .catch(e => callback(e));
+  }, (err) => {
+    if (err) next(err.message);
+    res.send('update success');
+  });
+}
+
+export default { load, get, create, update, list, remove, updatePriority };

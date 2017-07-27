@@ -59,7 +59,16 @@ function json2rule(ruleObj) {
     }
   });
   const condition = `function(R) {${conditionsFuncs} R.when(${_.join(conditions, ' && ')});}`;
-  const consequence = `function(R) {this.actions.push('${ruleObj.action}'); R.next();}`;
+  let consequence = '';
+  if (typeof ruleObj.action === 'string') {
+    consequence = `function(R) {this.actions.push('${ruleObj.action}'); R.next();}`;
+  } else {
+    const tmpObj = Object.assign({}, ruleObj.action);
+    Object.keys(ruleObj.action).forEach((item) => {
+      tmpObj[item] = ruleObj.action[item].value;
+    });
+    consequence = `function(R) {this.actions.push('${JSON.stringify(tmpObj)}'); R.next();}`;
+  }
   return { condition, consequence };
 }
 
