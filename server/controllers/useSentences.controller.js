@@ -38,9 +38,11 @@ function get(req, res, next) {
         (err, results) => {
           const roomSentence = [];
           _.forEach(results[0], (item, index) => {
-            const a = JSON.parse(item);
-            a.roomCategory = results[1][index].roomCategory;
-            roomSentence.push(a);
+            if (results[1][index]) {
+              const a = JSON.parse(item);
+              a.roomCategory = results[1][index].roomCategory;
+              roomSentence.push(a);
+            }
           });
           callback(null, roomSentence);
         });
@@ -70,16 +72,27 @@ function get(req, res, next) {
                 const a = _.find(req.body.rooms, r => r.roomCategory === o.roomCategory);
                 return !a.available;
               });
-              cb(null, availableRooms);
+              const errorRooms = _.map(availableRooms, (o) => {
+                const a = _.find(req.body.rooms, r => r.roomCategory === o.roomCategory);
+                return a;
+              });
+              cb(null, errorRooms);
             })
             .catch(e => next(e));
         }],
         (err, results) => {
+          const roomsArray = results[1];
           const roomSentence = [];
-          _.forEach(results[0], (item, index) => {
+          _.forEach(results[0], (item) => {
             const a = JSON.parse(item);
-            a.roomCategory = results[1][index].roomCategory;
-            roomSentence.push(a);
+            const roomIndex = _.findIndex(roomsArray, o => o.errorID === a.errorID.split('id')[1]);
+            if (roomIndex > -1) {
+              if (roomsArray[roomIndex]) {
+                a.roomCategory = roomsArray[roomIndex].roomCategory;
+                roomsArray.splice(roomIndex, 1);
+                roomSentence.push(a);
+              }
+            }
           });
           callback(null, roomSentence);
         });

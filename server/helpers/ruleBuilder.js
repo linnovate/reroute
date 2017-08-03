@@ -10,6 +10,10 @@ function json2rule(ruleObj) {
         conditions.push(`this.fact.${currentItem.factProp} === '${currentItem.value}'`);
         break;
       }
+      case 'equal or null': {
+        conditions.push(`(!this.fact.${currentItem.factProp} || this.fact.${currentItem.factProp} === '${currentItem.value}')`);
+        break;
+      }
       case 'in multi range': {
         const range = [];
         currentItem.value.forEach((val) => {
@@ -67,7 +71,12 @@ function json2rule(ruleObj) {
     Object.keys(ruleObj.action).forEach((item) => {
       tmpObj[item] = ruleObj.action[item].value;
     });
-    consequence = `function(R) {this.actions.push('${JSON.stringify(tmpObj)}'); R.next();}`;
+    // const obj = {
+    //   errorID: ruleObj.conditions.error.value,
+    //   action: tmpObj
+    // };
+    const obj = Object.assign({ errorID: ruleObj.conditions.error.value }, tmpObj);
+    consequence = `function(R) {this.actions.push('${JSON.stringify(obj)}'); R.next();}`;
   }
   return { condition, consequence };
 }
