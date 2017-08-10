@@ -7,7 +7,7 @@ function test(req, res, next) {
   .then((result) => {
     const availableRooms = _.filter(result, (o) => {
       const a = _.find(req.body.rooms, r => r.roomCategory === o.roomCategory);
-      return a.available;
+      return a ? a.available : false;
     });
     const roomsIcons = [];
     _.forEach(availableRooms, (item) => {

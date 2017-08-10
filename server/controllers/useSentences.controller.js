@@ -29,7 +29,7 @@ function get(req, res, next) {
             .then((roomsOrder) => {
               const availableRooms = _.filter(roomsOrder, (o) => {
                 const a = _.find(req.body.rooms, r => r.roomCategory === o.roomCategory);
-                return a.available;
+                return a ? a.available : false;
               });
               cb(null, availableRooms);
             })
@@ -70,7 +70,7 @@ function get(req, res, next) {
             .then((roomsOrder) => {
               const availableRooms = _.filter(roomsOrder, (o) => {
                 const a = _.find(req.body.rooms, r => r.roomCategory === o.roomCategory);
-                return !a.available;
+                return a ? !a.available : false;
               });
               const errorRooms = _.map(availableRooms, (o) => {
                 const a = _.find(req.body.rooms, r => r.roomCategory === o.roomCategory);
