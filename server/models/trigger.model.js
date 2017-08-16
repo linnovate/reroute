@@ -10,9 +10,12 @@ const TriggerSchema = new mongoose.Schema({
   value: {
     type: Number,
   },
+  showMultiple: {
+    type: Boolean
+  },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   }
 });
 
@@ -25,6 +28,17 @@ TriggerSchema.statics = {
 
   get(id) {
     return this.findById(id)
+      .exec()
+      .then((trigger) => {
+        if (trigger) {
+          return trigger;
+        }
+        const err = new APIError('No such trigger exists!', httpStatus.NOT_FOUND);
+        return Promise.reject(err);
+      });
+  },
+  getByDesc(description) {
+    return this.find({ description })
       .exec()
       .then((trigger) => {
         if (trigger) {
