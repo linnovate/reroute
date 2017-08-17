@@ -22,13 +22,11 @@ function list(req, res, next) {
 function create(req, res, next) {
   const trigger = new Trigger({
     description: req.body.description,
+    value: req.body.newValue,
+    sentence: req.body.sentence,
+    showMultiple: req.body.showMultiple,
+    timeout: req.body.timeout
   });
-  if (req.body.newValue !== null) {
-    trigger.value = req.body.newValue;
-  }
-  if (req.body.showMultiple !== null) {
-    trigger.showMultiple = req.body.showMultiple;
-  }
   trigger.save()
     .then(savedTrigger => res.json(savedTrigger))
     .catch(e => next(e));
@@ -36,12 +34,10 @@ function create(req, res, next) {
 
 function update(req, res, next) {
   const trigger = req.trigger;
-  if (req.body.newValue !== null) {
-    trigger.value = req.body.newValue;
-  }
-  if (req.body.showMultiple !== null) {
-    trigger.showMultiple = req.body.showMultiple;
-  }
+  trigger.value = req.body.newValue;
+  trigger.sentence = req.body.sentence;
+  trigger.showMultiple = req.body.showMultiple;
+  trigger.timeout = req.body.timeout;
   trigger.save()
     .then(savedTrigger => res.json(savedTrigger))
     .catch(e => next(e));
@@ -57,7 +53,7 @@ function test(req, res, next) {
           const start = new Date(new Date().getTime() - (trigger.value * 60 * 1000));
           Reservation.find({ createdAt: { $gte: start } }).exec().then((result) => {
             if (result.length > 0) {
-              callback(null, 'הזמנה בוצעה');
+              callback(null, trigger);
             } else callback(null, null);
           })
             .catch(e => next(e));
@@ -70,7 +66,7 @@ function test(req, res, next) {
           const start = new Date(new Date().getTime() - (60 * 60 * 1000));
           Reservation.find({ createdAt: { $gte: start } }).exec().then((result) => {
             if (result.length >= trigger.value) {
-              callback(null, `${result.length} אנשים הזמינו בשעה האחרונה`);
+              callback(null, trigger);
             } else callback(null, null);
           })
             .catch(e => next(e));
@@ -83,7 +79,7 @@ function test(req, res, next) {
           const start = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
           Reservation.find({ createdAt: { $gte: start } }).exec().then((result) => {
             if (result.length >= trigger.value) {
-              callback(null, `${result.length} אנשים הזמינו ב24 שעות אחרונות`);
+              callback(null, trigger);
             } else callback(null, null);
           })
             .catch(e => next(e));
@@ -94,7 +90,7 @@ function test(req, res, next) {
         const arr = [];
         _.forEach(results, (q) => {
           if (q) {
-            arr.push({ sentence: q });
+            arr.push(q);
           }
         });
         res.json(arr);

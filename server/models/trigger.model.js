@@ -10,8 +10,14 @@ const TriggerSchema = new mongoose.Schema({
   value: {
     type: Number,
   },
+  sentence: {
+    type: String,
+  },
   showMultiple: {
     type: Boolean
+  },
+  timeout: {
+    type: Number,
   },
   createdAt: {
     type: Date,
