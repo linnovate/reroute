@@ -13,6 +13,9 @@ const TriggerSchema = new mongoose.Schema({
   sentence: {
     type: String,
   },
+  sentenceEng: {
+    type: String
+  },
   showMultiple: {
     type: Boolean
   },

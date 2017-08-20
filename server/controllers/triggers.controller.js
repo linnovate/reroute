@@ -24,6 +24,7 @@ function create(req, res, next) {
     description: req.body.description,
     value: req.body.newValue,
     sentence: req.body.sentence,
+    sentenceEng: req.body.sentenceEng,
     showMultiple: req.body.showMultiple,
     timeout: req.body.timeout
   });
@@ -36,6 +37,7 @@ function update(req, res, next) {
   const trigger = req.trigger;
   trigger.value = req.body.newValue;
   trigger.sentence = req.body.sentence;
+  trigger.sentenceEng = req.body.sentenceEng;
   trigger.showMultiple = req.body.showMultiple;
   trigger.timeout = req.body.timeout;
   trigger.save()
