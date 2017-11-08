@@ -32,7 +32,6 @@ function get(req, res) {
 function create(req, res, next) {
   const ruleTmp = regex.json2rule(req.body.ruleObj);
   const rule = new Rule({
-    type: req.body.type,
     name: req.body.ruleName,
     ruleObj: req.body.ruleObj,
     condition: ruleTmp.condition,
@@ -40,21 +39,9 @@ function create(req, res, next) {
     _on: true,
     priority: 1,
   });
-  if (req.body.type === 'sentences') {
-    rule.available = req.body.ruleObj.conditions.available;
-    Rule.getCount({ type: 'sentences', available: rule.available })
-      .then((c) => {
-        rule.priority = c + 1;
-        rule.save()
-          .then(savedRule => res.json(savedRule))
-          .catch(e => next(e));
-      })
-      .catch(e => next(e));
-  } else {
-    rule.save()
-      .then(savedRule => res.json(savedRule))
-      .catch(e => next(e));
-  }
+  rule.save()
+    .then(savedRule => res.json(savedRule))
+    .catch(e => next(e));
 }
 
 /**
@@ -83,8 +70,14 @@ function update(req, res, next) {
  * @returns {Rule[]}
  */
 function list(req, res, next) {
-  const { limit = 50, skip = 0, type, available } = req.query;
-  Rule.list({ limit, skip, type, available })
+  const {
+    limit = 50, skip = 0, type,
+  } = req.query;
+  Rule.list({
+      limit,
+      skip,
+      type,
+    })
     .then(rules => res.json(rules))
     .catch(e => next(e));
 }
@@ -120,4 +113,12 @@ function updatePriority(req, res, next) {
   });
 }
 
-export default { load, get, create, update, list, remove, updatePriority };
+export default {
+  load,
+  get,
+  create,
+  update,
+  list,
+  remove,
+  updatePriority
+};

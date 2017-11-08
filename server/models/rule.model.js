@@ -7,10 +7,6 @@ import APIError from '../helpers/APIError';
  * Rule Schema
  */
 const RuleSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    enum: ['upsales', 'sentences'],
-  },
   available: {
     type: Boolean
   },
@@ -80,11 +76,8 @@ RuleSchema.statics = {
    * @param {number} limit - Limit number of rules to be returned.
    * @returns {Promise<Rule[]>}
    */
-  list({ skip = 0, limit = 50, type, available } = {}) {
-    const query = { type };
-    if (type === 'sentences') {
-      query.available = available;
-    }
+  list({ skip = 0, limit = 50, } = {}) {
+    const query = { };
     return this.find(query)
       .sort({ priority: 1, createdAt: -1 })
       .skip(+skip)
@@ -98,7 +91,7 @@ RuleSchema.statics = {
       query.available = available;
     }
     return this.count(query)
-    .exec();
+      .exec();
   }
 };
 

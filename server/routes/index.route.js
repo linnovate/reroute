@@ -3,13 +3,6 @@ import userRoutes from './user.route';
 import authRoutes from './auth.route';
 import ruleRoutes from './rule.route';
 import testRulesRoutes from './testRules.route';
-import iconsRoutes from './icons.route';
-import useIconsRoutes from './useIcons.route';
-import roomRoutes from './room.route';
-import useSentencesRoutes from './useSentences.route';
-import triggersRoutes from './triggers.route';
-import useTriggersRoutes from './useTriggers.route';
-import reservationRoutes from './reservation.route';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -28,19 +21,5 @@ router.use('/auth', authRoutes);
 router.use('/rules', ruleRoutes);
 
 router.use('/use-upsales', testRulesRoutes);
-
-router.use('/use-sentences', useSentencesRoutes);
-
-router.use('/icons', iconsRoutes);
-
-router.use('/use-icons', useIconsRoutes);
-
-router.use('/rooms', roomRoutes);
-
-router.use('/triggers', triggersRoutes);
-
-router.use('/use-triggers', useTriggersRoutes);
-
-router.use('/reservation', reservationRoutes);
 
 export default router;

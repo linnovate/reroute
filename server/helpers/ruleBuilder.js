@@ -3,8 +3,8 @@ import _ from 'lodash';
 function json2rule(ruleObj) {
   const conditions = [];
   let conditionsFuncs = '';
-  Object.keys(ruleObj.conditions).forEach((item) => {
-    const currentItem = ruleObj.conditions[item];
+  ruleObj.conditions.forEach((item) => {
+    const currentItem = item;
     switch (currentItem.sign) {
       case 'equal': {
         conditions.push(`this.fact.${currentItem.factProp} === '${currentItem.value}'`);
@@ -63,21 +63,9 @@ function json2rule(ruleObj) {
     }
   });
   const condition = `function(R) {${conditionsFuncs} R.when(${_.join(conditions, ' && ')});}`;
-  let consequence = '';
-  if (typeof ruleObj.action === 'string') {
-    consequence = `function(R) {this.actions.push('${ruleObj.action}'); R.next();}`;
-  } else {
-    const tmpObj = Object.assign({}, ruleObj.action);
-    Object.keys(ruleObj.action).forEach((item) => {
-      tmpObj[item] = ruleObj.action[item].value;
-    });
-    // const obj = {
-    //   errorID: ruleObj.conditions.error.value,
-    //   action: tmpObj
-    // };
-    const obj = Object.assign({ errorID: ruleObj.conditions.error.value }, tmpObj);
-    consequence = `function(R) {this.actions.push('${JSON.stringify(obj)}'); R.next();}`;
-  }
+  const actions = ruleObj.actions.map((action) =>JSON.stringify(action));
+  const consequence = `function(R) {this.actions = this.actions.concat([${actions}]); R.next();}`;  
+  
   return { condition, consequence };
 }
 
