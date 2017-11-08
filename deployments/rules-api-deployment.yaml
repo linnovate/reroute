@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.4.0 (c7964e7)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rules-api
+  name: rules-api
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rules-api
+    spec:
+      containers:
+      - args:
+        - node
+        - dist/index
+        env:
+        - name: DEBUG
+          value: express-mongoose-es6-rest-api:*
+        - name: JWT_SECRET
+          value: 0a6b944d-d2fb-46fc-a85e-0295c986cd9f
+        - name: MONGO_HOST
+          value: mongodb://mongo/express-mongoose-es6-rest-api-development
+        - name: MONGO_PORT
+          value: "27017"
+        - name: NODE_ENV
+          value: development
+        - name: PORT
+          value: "4040"
+        image: localhost:5000/rules-api
+        name: rules-api
+        ports:
+        - containerPort: 4040
+        resources: {}
+        workingDir: /usr/src/app
+      restartPolicy: Always
+status: {}
