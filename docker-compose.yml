@@ -4,8 +4,8 @@ services:
   rules-api:
     # image: 'rules-api'
     image: 'localhost:5000/rules-api'
-    build:
-      context: .
+    # build:
+    #   context: .
     working_dir: /usr/src/app
     # Expose ports [HOST:CONTAINER}
     ports:
@@ -18,7 +18,7 @@ services:
       - mongo
     # Overwrite any env var defined in .env file (if required)
     environment:
-      - MONGO_HOST=mongodb://mongo/express-mongoose-es6-rest-api-development
+      - MONGO_HOST=mongodb://mongo/rules-api
       - DEBUG=express-mongoose-es6-rest-api:*
       - NODE_ENV=development
       - PORT=4040
@@ -27,7 +27,7 @@ services:
     # Link to containers in another service.
     # Links also express dependency between services in the same way as depends_on,
     # so they determine the order of service startup.
-  # mongo:
-  #   image: "mongo:3.4.2"
-  #   ports:
-  #     - "27017:27017"
+  mongo:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
