@@ -19,5 +19,3 @@ function test(req, res, next) {
 
 
 export default { test };
-
-

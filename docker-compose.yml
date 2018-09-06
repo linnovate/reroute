@@ -2,16 +2,15 @@ version: '3'
 
 services:
   rules-api:
-    # image: 'rules-api'
-    image: 'localhost:5000/rules-api'
-    # build:
-    #   context: .
+    image: 'rules-api'
+    build:
+      context: .
     working_dir: /usr/src/app
     # Expose ports [HOST:CONTAINER}
     ports:
       - "4040:4040"
-    # volumes:
-    #   - .:/usr/src/app
+    volumes:
+      - .:/usr/src/app
     command: node dist/index
     restart: always
     depends_on:
@@ -28,6 +27,6 @@ services:
     # Links also express dependency between services in the same way as depends_on,
     # so they determine the order of service startup.
   mongo:
-    image: "mongo:latest"
+    image: "mongo:3.4"
     ports:
       - "27017:27017"

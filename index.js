@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
-import util from 'util';
+// import util from 'util';
 
 // config should be imported before importing any other file
 import config from './config/config';
 import app from './config/express';
 
-const debug = require('debug')('express-mongoose-es6-rest-api:index');
+// const debug = require('debug')('express-mongoose-es6-rest-api:index');
 
 // make bluebird default Promise
 Promise = require('bluebird'); // eslint-disable-line no-global-assign

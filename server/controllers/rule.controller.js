@@ -1,5 +1,4 @@
 import async from 'async';
-import _ from 'lodash';
 import Rule from '../models/rule.model';
 import regex from '../helpers/ruleBuilder';
 
@@ -53,7 +52,8 @@ function update(req, res, next) {
   const rule = req.rule;
   const ruleTmp = regex.json2rule(req.body.ruleObj);
 
-  rule.name = req.body.ruleName;
+  rule.title = req.body.title;
+  rule.description = req.body.description;
   rule.ruleObj = req.body.ruleObj;
   rule.condition = ruleTmp.condition;
   rule.consequence = ruleTmp.consequence;
@@ -74,10 +74,10 @@ function list(req, res, next) {
     limit = 50, skip = 0, type,
   } = req.query;
   Rule.list({
-      limit,
-      skip,
-      type,
-    })
+    limit,
+    skip,
+    type,
+  })
     .then(rules => res.json(rules))
     .catch(e => next(e));
 }

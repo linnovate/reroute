@@ -7,6 +7,12 @@ import APIError from '../helpers/APIError';
  * Rule Schema
  */
 const RuleSchema = new mongoose.Schema({
+  title: {
+    type: String
+  },
+  description: {
+    type: String
+  },
   available: {
     type: Boolean
   },
@@ -24,11 +30,11 @@ const RuleSchema = new mongoose.Schema({
   },
   condition: {
     type: String,
-    required: true
+    //required: true
   },
   consequence: {
     type: String,
-    required: true
+    //required: true
   },
   createdAt: {
     type: Date,

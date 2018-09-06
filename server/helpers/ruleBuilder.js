@@ -7,11 +7,11 @@ function json2rule(ruleObj) {
     const currentItem = item;
     switch (currentItem.sign) {
       case 'equal': {
-        conditions.push(`this.fact.${currentItem.factProp} === '${currentItem.value}'`);
+        conditions.push(`this.fact.${currentItem.first} === ${currentItem.second.type === 'value' ? `'${currentItem.second.value}'` : `this.fact.${currentItem.second.value}`}`);
         break;
       }
       case 'equal or null': {
-        conditions.push(`(!this.fact.${currentItem.factProp} || this.fact.${currentItem.factProp} === '${currentItem.value}')`);
+        conditions.push(`(!this.fact.${currentItem.first} || this.fact.${currentItem.first} === ${currentItem.second.type === 'value' ? `'${currentItem.second.value}'` : `this.fact.${currentItem.second.value}`})`);
         break;
       }
       case 'in multi range': {
@@ -63,9 +63,8 @@ function json2rule(ruleObj) {
     }
   });
   const condition = `function(R) {${conditionsFuncs} R.when(${_.join(conditions, ' && ')});}`;
-  const actions = ruleObj.actions.map((action) =>JSON.stringify(action));
-  const consequence = `function(R) {this.actions = this.actions.concat([${actions}]); R.next();}`;  
-  
+  const actions = ruleObj.actions.map(action => JSON.stringify(action));
+  const consequence = `function(R) {this.actions = this.actions.concat([${actions}]); R.next();}`;
   return { condition, consequence };
 }
 

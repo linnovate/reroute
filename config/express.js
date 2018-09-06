@@ -1,5 +1,5 @@
 import express from 'express';
-import logger from 'morgan';
+// import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compress from 'compression';
@@ -9,7 +9,7 @@ import httpStatus from 'http-status';
 import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
-import winstonInstance from './winston';
+// import winstonInstance from './winston';
 import routes from '../server/routes/index.route';
 import config from './config';
 import APIError from '../server/helpers/APIError';
@@ -17,7 +17,7 @@ import APIError from '../server/helpers/APIError';
 const app = express();
 
 if (config.env === 'development') {
-  //app.use(logger('dev'));
+  // app.use(logger('dev'));
 }
 
 // parse body params and attache them to req.body
