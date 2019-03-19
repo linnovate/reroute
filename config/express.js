@@ -13,8 +13,11 @@ import winstonInstance from './winston';
 import routes from '../server/routes/index.route';
 import config from './config';
 import APIError from '../server/helpers/APIError';
+import morgan from 'morgan';
 
 const app = express();
+
+app.use(morgan('dev'));
 
 if (config.env === 'development') {
   //app.use(logger('dev'));
